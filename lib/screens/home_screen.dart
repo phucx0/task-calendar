@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
                   return ListTile(
                     title: Text(task.title),
                     subtitle: Text(
-                        "${task.date.day}/${task.date.month}/${task.date.year}"),
+                        "${task.date.day}/${task.date.month}/${task.date.year} - ${task.date.hour}:${task.date.minute}"),
                   );
                 },
               );

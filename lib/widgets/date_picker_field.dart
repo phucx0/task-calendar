@@ -12,8 +12,10 @@ class DatePickerField extends StatefulWidget {
 class _DatePickerFieldState extends State<DatePickerField> {
   DateTime? selected;
 
-  Future pickDate() async {
+  Future pickDateTime() async {
     DateTime now = DateTime.now();
+
+    /// chọn ngày
     final date = await showDatePicker(
       context: context,
       initialDate: now,
@@ -21,20 +23,39 @@ class _DatePickerFieldState extends State<DatePickerField> {
       lastDate: DateTime(2100),
     );
 
-    if (date != null) {
-      setState(() => selected = date);
-      widget.onSelected(date);
-    }
+    if (date == null) return;
+
+    /// chọn giờ
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (time == null) return;
+
+    /// ghép ngày + giờ
+    final result = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+
+    setState(() => selected = result);
+    widget.onSelected(result);
   }
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: pickDate,
+      onPressed: pickDateTime,
       child: Text(
         selected == null
-            ? "Chọn ngày"
-            : "${selected!.day}/${selected!.month}/${selected!.year}",
+            ? "Chọn ngày giờ"
+            : "${selected!.day}/${selected!.month}/${selected!.year}  "
+              "${selected!.hour.toString().padLeft(2, '0')}:"
+              "${selected!.minute.toString().padLeft(2, '0')}",
       ),
     );
   }
